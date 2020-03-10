@@ -7,6 +7,7 @@ import axios from 'axios'
 import { ADMIN_END_POINT } from '../../../constants/endpoint'
 import { TextField } from '@material-ui/core'
 import AlertDialog from '../../global/dialog'
+import SimpleTable from '../table'
 
 const Main = () => {
 
@@ -41,7 +42,7 @@ const Main = () => {
             <TextField id="outlined-basic" label="Search" variant="outlined" onChange={textFieldHandler} />
         </div>
         <div className="view__container">
-            <div className="header">
+            {/* <div className="header">
                 <span onClick={numberLabelTapped}>
                     번호
               </span>
@@ -69,15 +70,17 @@ const Main = () => {
                 <span>
                     ip 주소
               </span>
-            </div>
-            {searching ?
+            </div> */}
+            {/* {searching ?
                 searchedInfos.map((info, index) => {
                     return <Cell key={index} info={info} />
                 }) : infos.map((info, index) => {
                     return <Cell key={index} info={info} />
                 })
 
-            }
+            } */}
+
+            {searching ? <SimpleTable noLabelTapped={numberLabelTapped} infos={searchedInfos} /> : <SimpleTable noLabelTapped={numberLabelTapped} infos={infos} />}
 
 
             {dialog && <AlertDialog title={dialogTitle} message={dialogMessage} callback={closeAlertAndLogout} />}

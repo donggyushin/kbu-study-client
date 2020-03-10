@@ -38,10 +38,15 @@
         .cell__container {
             display: grid;
             grid-template-columns: 0.5fr 1fr 0.5fr 0.5fr 1fr 1fr 1fr 1fr 1fr;
+            height: 40px;
+            align-items: center;
+            &:nth-child(2n - 1) {
+                background-color: gainsboro;
+            }
             span {
                 display: flex;
                 justify-content: center;
-                border: 1px solid gray;
+                // border: 1px solid gray;
                 border-top: 0;
                 &:nth-child(1) {
                     border-right: 0;
@@ -72,10 +77,15 @@
         .header {
             display: grid;
             grid-template-columns: 0.5fr 1fr 0.5fr 0.5fr 1fr 1fr 1fr 1fr 1fr;
+            height: 50px;
+            align-items: center;
+            background: gainsboro;
+            // box-shadow: 0px 0px 5px 1px rgba(199,191,199,1);
             span {
                 display: flex;
                 justify-content: center;
-                border: 1px solid gray;
+                font-weight: 600;
+                // border: 1px solid gray;
                 &:nth-child(1) {
                     border-right: 0;
                 }
