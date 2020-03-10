@@ -42,43 +42,6 @@ const Main = () => {
             <TextField id="outlined-basic" label="Search" variant="outlined" onChange={textFieldHandler} />
         </div>
         <div className="view__container">
-            {/* <div className="header">
-                <span onClick={numberLabelTapped}>
-                    번호
-              </span>
-                <span onClick={numberLabelTapped}>
-                    접근 시간
-              </span>
-                <span>
-                    유형
-              </span>
-                <span>
-                    학생
-              </span>
-                <span>
-                    학번
-              </span>
-                <span>
-                    학과
-              </span>
-                <span>
-                    관리자
-              </span>
-                <span>
-                    관리부서
-              </span>
-                <span>
-                    ip 주소
-              </span>
-            </div> */}
-            {/* {searching ?
-                searchedInfos.map((info, index) => {
-                    return <Cell key={index} info={info} />
-                }) : infos.map((info, index) => {
-                    return <Cell key={index} info={info} />
-                })
-
-            } */}
 
             {searching ? <SimpleTable noLabelTapped={numberLabelTapped} infos={searchedInfos} /> : <SimpleTable noLabelTapped={numberLabelTapped} infos={infos} />}
 
@@ -144,7 +107,9 @@ const Main = () => {
     }
 
     function fetchInfos() {
-        console.log(localStorage.getItem("token"))
+
+        console.log("as")
+
         axios.get(`${ADMIN_END_POINT}v1/msc/testfetch`, {
             headers: {
                 Authorization: localStorage.getItem("token")
@@ -153,8 +118,9 @@ const Main = () => {
             .then(res => {
 
                 if (res.status === 200) {
-                    console.log(res.data.data)
-                    setInfos(res.data.data)
+                    const infos = res.data.data as Info[]
+                    infos.sort(compareNumber2)
+                    setInfos(infos)
                 } else {
                     setDialogTitle("성서봇입니다")
                     setDialogMessage("현재 다른 기기에서 접속한 유저가 있습니다...")
