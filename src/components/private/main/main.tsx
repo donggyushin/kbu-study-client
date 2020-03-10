@@ -20,7 +20,8 @@ const Main = () => {
     const [noDesc, setNoDesc] = useState(true)
 
     useEffect(() => {
-        fetchInfos()
+        setInterval(function () { fetchInfos() }, 3000);
+
     }, [])
 
     return <div className="private__main__container">
