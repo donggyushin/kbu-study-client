@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './styles.scss'
-import Cell from './cell'
 import { Info } from '../../../constants/types'
 import axios from 'axios'
 import { ADMIN_END_POINT } from '../../../constants/endpoint'
