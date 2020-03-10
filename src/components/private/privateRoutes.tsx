@@ -15,7 +15,7 @@ const cryptr = new Cryptr('asdasd')
 export default function App() {
 
     useEffect(() => {
-        autoLogin()
+        // autoLogin()
     }, [])
 
     return (

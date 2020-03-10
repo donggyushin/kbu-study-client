@@ -25,14 +25,53 @@
         }
     }
 
+    .search_bar__container {
+        width: 100%;
+    display: flex;
+    justify-content: center;
+    }
+
     .view__container {
-        width: 700px;
+        width: 90%;
+        min-width: 1300px;
         margin-top: 70px;
-        position: relative;
-        right: 150px;
+        .cell__container {
+            display: grid;
+            grid-template-columns: 0.5fr 1fr 0.5fr 0.5fr 1fr 1fr 1fr 1fr 1fr;
+            span {
+                display: flex;
+                justify-content: center;
+                border: 1px solid gray;
+                border-top: 0;
+                &:nth-child(1) {
+                    border-right: 0;
+                }
+                &:nth-child(2) {
+                    border-right: 0;
+                }
+                &:nth-child(3) {
+                    border-right: 0;
+                }
+                &:nth-child(4) {
+                    border-right: 0;
+                }
+                &:nth-child(5) {
+                    border-right: 0;
+                }
+                &:nth-child(6) {
+                    border-right: 0;
+                }
+                &:nth-child(7) {
+                    border-right: 0;
+                }
+                &:nth-child(8) {
+                    border-right: 0;
+                }
+            }
+        }
         .header {
             display: grid;
-            grid-template-columns: repeat(4,1fr);
+            grid-template-columns: 0.5fr 1fr 0.5fr 0.5fr 1fr 1fr 1fr 1fr 1fr;
             span {
                 display: flex;
                 justify-content: center;
@@ -44,6 +83,21 @@
                     border-right: 0;
                 }
                 &:nth-child(3) {
+                    border-right: 0;
+                }
+                &:nth-child(4) {
+                    border-right: 0;
+                }
+                &:nth-child(5) {
+                    border-right: 0;
+                }
+                &:nth-child(6) {
+                    border-right: 0;
+                }
+                &:nth-child(7) {
+                    border-right: 0;
+                }
+                &:nth-child(8) {
                     border-right: 0;
                 }
             }
