@@ -20,8 +20,9 @@ const Post = () => {
         </div>
         <div className="post__container">
             <div className="post__form">
+                <TextField id="standard-basic" label="이름" />
                 <TextField id="standard-basic" label="학번" />
-                <TextField id="standard-basic" label="날짜" />
+                <TextField id="standard-basic" label="전공" />
                 <TextField id="standard-basic" label="입실시간" />
                 <TextField id="standard-basic" label="퇴실시간" />
                 <Button variant="contained" color="primary">

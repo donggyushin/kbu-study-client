@@ -7,6 +7,8 @@ import { ADMIN_END_POINT } from '../../../constants/endpoint'
 import { TextField } from '@material-ui/core'
 import AlertDialog from '../../global/dialog'
 import SimpleTable from '../table'
+import ExitTimeInput from './exitTimeInput'
+import ExcelDown from './excelDown'
 
 const Main = () => {
 
@@ -17,9 +19,14 @@ const Main = () => {
     const [dialogMessage, setDialogMessage] = useState("")
     const [dialog, setDialog] = useState(false)
     const [noDesc, setNoDesc] = useState(true)
+    const [exitTimeInput, setExitTimeInput] = useState(false)
+    const [exitTimeString, setExitTimeString] = useState("")
+    const [excelDownView, setExcelDownView] = useState(false)
+
+
 
     useEffect(() => {
-        setInterval(function () { fetchInfos() }, 3000);
+        setInterval(function () { fetchInfos() }, 333000);
 
     }, [])
 
@@ -43,12 +50,40 @@ const Main = () => {
         </div>
         <div className="view__container">
 
-            {searching ? <SimpleTable noLabelTapped={numberLabelTapped} infos={searchedInfos} /> : <SimpleTable noLabelTapped={numberLabelTapped} infos={infos} />}
+            {searching ? <SimpleTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={searchedInfos} /> : <SimpleTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={infos} />}
 
 
             {dialog && <AlertDialog title={dialogTitle} message={dialogMessage} callback={closeAlertAndLogout} />}
         </div>
+
+        <button onClick={excelDownButtonTapped} className="excel_down_button">
+            엑셀다운
+        </button>
+        {(excelDownView && searching) && <ExcelDown datas={searchedInfos} />}
+        {(excelDownView && !searching) && <ExcelDown datas={infos} />}
+
+        {exitTimeInput && <ExitTimeInput
+            turnOfExitTimeInput={turnOfExitTimeInput}
+            handleExitTimeString={handleExitTimeString} exitTimeString={exitTimeString} />}
     </div>
+
+
+    function excelDownButtonTapped() {
+        setExcelDownView(true)
+    }
+
+    function turnOfExitTimeInput() {
+        setExitTimeInput(false)
+    }
+
+    function handleExitTimeString(e: React.ChangeEvent<HTMLInputElement>) {
+        setExitTimeString(e.target.value)
+    }
+
+    function turnOnExitTimeInput(text: string) {
+        setExitTimeInput(true)
+        setExitTimeString(text)
+    }
 
     function compareNumber(a: Info, b: Info) {
         if (a.no < b.no) {
@@ -71,9 +106,7 @@ const Main = () => {
     }
 
     function numberLabelTapped() {
-        console.log("number label tapped")
         const sortedInfos = noDesc ? infos.sort(compareNumber2) : infos.sort(compareNumber)
-        console.log(sortedInfos)
         setNoDesc(!noDesc)
         setSearchedInfos(sortedInfos)
     }
@@ -107,8 +140,6 @@ const Main = () => {
     }
 
     function fetchInfos() {
-
-        console.log("as")
 
         axios.get(`${ADMIN_END_POINT}v1/msc/testfetch`, {
             headers: {

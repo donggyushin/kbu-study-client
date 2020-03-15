@@ -20,9 +20,10 @@ const useStyles = makeStyles({
 interface IProps {
     infos: Info[]
     noLabelTapped: () => void
+    turnOnExitTimeInput: (text: string) => void
 }
 
-const SimpleTable: React.FC<IProps> = ({ infos, noLabelTapped }) => {
+const SimpleTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTimeInput }) => {
     const classes = useStyles();
 
     return (
@@ -31,13 +32,13 @@ const SimpleTable: React.FC<IProps> = ({ infos, noLabelTapped }) => {
                 <TableHead>
                     <TableRow>
                         <TableCell onClick={noLabelTapped}>no</TableCell>
-                        <TableCell onClick={noLabelTapped} align="right">Access Time</TableCell>
-                        <TableCell align="right">Type</TableCell>
-                        <TableCell align="right">Student</TableCell>
-                        <TableCell align="right">Student Num</TableCell>
-                        <TableCell align="right">Major</TableCell>
-                        <TableCell align="right">Admin</TableCell>
-                        <TableCell align="right">Admin Depart</TableCell>
+                        <TableCell onClick={noLabelTapped} align="right">이름</TableCell>
+                        <TableCell align="right">학번</TableCell>
+                        <TableCell align="right">전공</TableCell>
+                        <TableCell align="right">입실</TableCell>
+                        <TableCell align="right">퇴실</TableCell>
+                        <TableCell align="right">분환산</TableCell>
+                        <TableCell align="right">분환산</TableCell>
                         <TableCell align="right">ip address</TableCell>
                     </TableRow>
                 </TableHead>
@@ -47,13 +48,15 @@ const SimpleTable: React.FC<IProps> = ({ infos, noLabelTapped }) => {
                             <TableCell component="th" scope="row">
                                 {info.no}
                             </TableCell>
-                            <TableCell align="right">{info.access_time}</TableCell>
-                            <TableCell align="right">{info.access_type}</TableCell>
                             <TableCell align="right">{info.user_name}</TableCell>
                             <TableCell align="right">{info.user_univ_id}</TableCell>
                             <TableCell align="right">{info.user_major}</TableCell>
-                            <TableCell align="right">{info.admin_id}</TableCell>
-                            <TableCell align="right">{info.admin_department}</TableCell>
+                            <TableCell align="right">{info.access_time}</TableCell>
+                            <TableCell onClick={() => {
+                                turnOnExitTimeInput("준비중")
+                            }} align="right">{"준비중"}</TableCell>
+                            <TableCell align="right">{new Date(info.access_time).getHours() + ":" + new Date(info.access_time).getMinutes()}</TableCell>
+                            <TableCell align="right">{"준비중"}</TableCell>
                             <TableCell align="right">{info.ip_addr}</TableCell>
                         </TableRow>
                     ))}
