@@ -59,14 +59,17 @@ const Main = () => {
         <button onClick={excelDownButtonTapped} className="excel_down_button">
             엑셀다운
         </button>
-        {(excelDownView && searching) && <ExcelDown datas={searchedInfos} />}
-        {(excelDownView && !searching) && <ExcelDown datas={infos} />}
+        {(excelDownView && searching) && <ExcelDown turnOffExcelDownView={turnOffExcelDownView} datas={searchedInfos} />}
+        {(excelDownView && !searching) && <ExcelDown turnOffExcelDownView={turnOffExcelDownView} datas={infos} />}
 
         {exitTimeInput && <ExitTimeInput
             turnOfExitTimeInput={turnOfExitTimeInput}
             handleExitTimeString={handleExitTimeString} exitTimeString={exitTimeString} />}
     </div>
 
+    function turnOffExcelDownView() {
+        setExcelDownView(false)
+    }
 
     function excelDownButtonTapped() {
         setExcelDownView(true)

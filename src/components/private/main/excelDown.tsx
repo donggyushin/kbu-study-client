@@ -1,15 +1,41 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import { Info } from '../../../constants/types'
 //@ts-ignore
 import { JsonToExcel } from 'react-json-excel';
 
 interface IProps {
     datas: Info[]
+    turnOffExcelDownView: () => void
 }
 
+function useOutsideAlerter(ref: any, turnOffExcelDownView: () => void) {
+    /**
+     * Alert if clicked on outside of element
+     */
+    function handleClickOutside(event: any) {
+        if (ref.current && !ref.current.contains(event.target)) {
+            turnOffExcelDownView()
+        }
+    }
+
+    useEffect(() => {
+        // Bind the event listener
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            // Unbind the event listener on clean up
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    });
+}
+
+
 const ExcelDown: React.FC<IProps> = ({
-    datas
+    datas,
+    turnOffExcelDownView
 }) => {
+
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef, turnOffExcelDownView);
 
     const className = 'class-name-for-style',
         filename = 'Excel-file',
@@ -29,7 +55,7 @@ const ExcelDown: React.FC<IProps> = ({
         }
 
     return <div className="excel_down_container">
-        <div className="card">
+        <div ref={wrapperRef} className="card">
             <JsonToExcel
                 data={datas}
                 className={className}
