@@ -34,28 +34,34 @@ const LoginPage = () => {
 
     function loginPressed() {
 
-        axios.post(`${ADMIN_END_POINT}v1/auth/admin-login`, {
+
+        axios.post(`${ADMIN_END_POINT}auth/admin-login`, {
             id,
             pw: password
         })
             .then(res => {
+
+
                 if (res.status === 200) {
 
-                    console.log(res)
-
-                    const encrytedId = cryptr.encrypt(id)
-                    const encrytedPassword = cryptr.encrypt(password)
-
-                    localStorage.setItem("i", encrytedId)
-                    localStorage.setItem("p", encrytedPassword)
+                    localStorage.setItem("i", id)
+                    localStorage.setItem("p", password)
 
                     const token = res.headers.authorization
-                    localStorage.setItem("token", token)
-                    window.location.href = "/"
+
+                    if (token) {
+                        localStorage.setItem("token", token)
+                        window.location.href = "/"
+                    } else {
+                        alert("잘못된 계정 정보")
+                    }
+
+
                 }
             })
             .catch(err => {
                 console.error(err)
+                alert(err)
             })
     }
 }

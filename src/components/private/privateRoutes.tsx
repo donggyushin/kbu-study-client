@@ -37,21 +37,7 @@ export default function App() {
 
     function autoLogin() {
 
-        if (localStorage.getItem("i") && localStorage.getItem("p")) {
-            const encryptedId = localStorage.getItem("i") as string
-            const encryptedPassword = localStorage.getItem("p") as string
-            const decryptedId = cryptr.decrypt(encryptedId)
-            const decryptedPassword = cryptr.decrypt(encryptedPassword)
-
-            axios.post(`${END_POINT}auth/login`, {
-                id: decryptedId,
-                pw: decryptedPassword
-            })
-                .then(res => {
-                    const token = res.headers.authorization
-                    localStorage.setItem("token", token)
-                })
-        }
+        // 필요한가?
 
     }
 }

@@ -9,13 +9,13 @@ const Cell: React.FC<IProps> = ({ info }) => {
 
     return <div className="cell__container">
         <span>
-            {info.no}
+            {info.access_id}
         </span>
         <span>
-            {info.access_time}
+            {info.access_datetime}
         </span>
         <span>
-            {info.access_type}
+            {info.is_manual}
         </span>
         <span>
             {info.user_name}

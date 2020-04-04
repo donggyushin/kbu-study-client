@@ -26,9 +26,19 @@ const Main = () => {
 
 
     useEffect(() => {
-        setInterval(function () { fetchInfos() }, 333000);
 
+
+        fetchInfos()
+
+        const repeat = setInterval(function () { fetchInfos() }, 3000);
+
+
+        return function cleanup() {
+            clearInterval(repeat)
+        }
     }, [])
+
+
 
     return <div className="private__main__container">
         <div className="navigation__bar">
@@ -89,20 +99,20 @@ const Main = () => {
     }
 
     function compareNumber(a: Info, b: Info) {
-        if (a.no < b.no) {
+        if (a.access_id < b.access_id) {
             return -1;
         }
-        if (a.no > b.no) {
+        if (a.access_id > b.access_id) {
             return 1;
         }
         return 0;
     }
 
     function compareNumber2(a: Info, b: Info) {
-        if (a.no < b.no) {
+        if (a.access_id < b.access_id) {
             return 1;
         }
-        if (a.no > b.no) {
+        if (a.access_id > b.access_id) {
             return -1;
         }
         return 0;
@@ -128,14 +138,17 @@ const Main = () => {
         }
 
         const searchedInfos = infos.filter((info) => {
-            if (info.user_name.includes(value) || info.user_major.includes(value) ||
-                info.admin_id.includes(value) || info.admin_department.includes(value) ||
-                info.user_univ_id.includes(value) || info.ip_addr.includes(value)
+
+
+            if (info.user_name.includes(value) || info.user_major.includes(value)
+                || info.admin_id.includes(value) || info.admin_dept.includes(value)
+                || info.user_univ_id.includes(value) || info.ip_addr.includes(value)
             ) {
                 return true
             } else {
                 return false
             }
+
         })
 
         setSearchedInfos(searchedInfos)
@@ -143,16 +156,16 @@ const Main = () => {
     }
 
     function fetchInfos() {
-
-        axios.get(`${ADMIN_END_POINT}v1/msc/testfetch`, {
+        axios.get(`${ADMIN_END_POINT}msc/log`, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }
         })
             .then(res => {
-
                 if (res.status === 200) {
-                    const infos = res.data.data as Info[]
+                    const infos = res.data.data.data as Info[]
+                    console.log("res: ", res)
+                    console.log("infos: ", infos)
                     infos.sort(compareNumber2)
                     setInfos(infos)
                 } else {

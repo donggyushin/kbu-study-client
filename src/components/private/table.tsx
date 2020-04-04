@@ -46,16 +46,16 @@ const SimpleTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTimeInp
                     {infos.map((info, i) => (
                         <TableRow key={i}>
                             <TableCell component="th" scope="row">
-                                {info.no}
+                                {info.access_id}
                             </TableCell>
                             <TableCell align="right">{info.user_name}</TableCell>
                             <TableCell align="right">{info.user_univ_id}</TableCell>
                             <TableCell align="right">{info.user_major}</TableCell>
-                            <TableCell align="right">{info.access_time}</TableCell>
+                            <TableCell align="right">{info.access_datetime}</TableCell>
                             <TableCell onClick={() => {
                                 turnOnExitTimeInput("준비중")
                             }} align="right">{"준비중"}</TableCell>
-                            <TableCell align="right">{new Date(info.access_time).getHours() + ":" + new Date(info.access_time).getMinutes()}</TableCell>
+                            <TableCell align="right">{new Date(info.access_datetime).getHours() + ":" + new Date(info.access_datetime).getMinutes()}</TableCell>
                             <TableCell align="right">{"준비중"}</TableCell>
                             <TableCell align="right">{info.ip_addr}</TableCell>
                         </TableRow>
