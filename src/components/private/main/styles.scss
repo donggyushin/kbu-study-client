@@ -25,10 +25,17 @@
         }
     }
 
+
+
     .search_bar__container {
         width: 100%;
     display: flex;
     justify-content: center;
+    }
+
+
+    .date__picker {
+        margin-top: 60px;
     }
 
     .view__container {

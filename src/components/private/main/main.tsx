@@ -1,3 +1,4 @@
+import 'date-fns';
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './styles.scss'
@@ -9,8 +10,18 @@ import AlertDialog from '../../global/dialog'
 import SimpleTable from '../table'
 import ExitTimeInput from './exitTimeInput'
 import ExcelDown from './excelDown'
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
+
+var repeat: any
 
 const Main = () => {
+
+
 
     const [infos, setInfos] = useState<Info[]>([])
     const [searchedInfos, setSearchedInfos] = useState<Info[]>([])
@@ -22,15 +33,22 @@ const Main = () => {
     const [exitTimeInput, setExitTimeInput] = useState(false)
     const [exitTimeString, setExitTimeString] = useState("")
     const [excelDownView, setExcelDownView] = useState(false)
+    const [selectedFromDate, setSelectedFromDate] = React.useState<Date | null>(
+        new Date(),
+    );
+    const [selectedToDate, setSelectedToDate] = useState<Date | null>(new Date())
+
 
 
 
     useEffect(() => {
 
+        if (selectedToDate && selectedFromDate) {
+            fetchInfosFunction(selectedFromDate, selectedToDate)
+        }
 
-        fetchInfos()
+        makeDateInputElementInvalid()
 
-        const repeat = setInterval(function () { fetchInfos() }, 3000);
 
 
         return function cleanup() {
@@ -56,7 +74,39 @@ const Main = () => {
             <button onClick={logoutPressed}>로그아웃</button>
         </div>
         <div className="search_bar__container">
-            <TextField id="outlined-basic" label="Search" variant="outlined" onChange={textFieldHandler} />
+            <TextField id="outlined-basic" label="검색" variant="outlined" onChange={textFieldHandler} />
+        </div>
+        <div className="date__picker">
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <Grid container justify="space-around">
+                    <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        format="MM/dd/yyyy"
+                        margin="normal"
+                        id="date-picker-inline"
+                        label="검색 시작일"
+                        value={selectedFromDate}
+                        onChange={handleFromDateChange}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
+                    />
+                    <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        format="MM/dd/yyyy"
+                        margin="normal"
+                        id="date-picker-inline"
+                        label="검색 마지막일"
+                        value={selectedToDate}
+                        onChange={handleToDateChangee}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
+                    />
+                </Grid>
+            </MuiPickersUtilsProvider>
         </div>
         <div className="view__container">
 
@@ -76,6 +126,35 @@ const Main = () => {
             turnOfExitTimeInput={turnOfExitTimeInput}
             handleExitTimeString={handleExitTimeString} exitTimeString={exitTimeString} />}
     </div>
+
+    function fetchInfosFunction(dateFrom: Date, dateTo: Date) {
+
+        fetchInfos(dateFrom, dateTo)
+        repeat = setInterval(function () { fetchInfos(dateFrom, dateTo) }, 3000);
+    }
+
+    function makeDateInputElementInvalid() {
+        const input = document.getElementById("date-picker-inline") as HTMLInputElement
+        input.readOnly = true;
+    }
+
+    function handleToDateChangee(date: Date | null) {
+        clearInterval(repeat)
+        setSelectedToDate(date)
+        if (selectedFromDate && date) {
+            fetchInfosFunction(selectedFromDate, date)
+        }
+
+    }
+
+    function handleFromDateChange(date: Date | null) {
+        clearInterval(repeat)
+        setSelectedFromDate(date)
+        if (date && selectedToDate) {
+            fetchInfosFunction(date, selectedToDate)
+        }
+
+    }
 
     function turnOffExcelDownView() {
         setExcelDownView(false)
@@ -155,8 +234,12 @@ const Main = () => {
         setSearching(true)
     }
 
-    function fetchInfos() {
-        axios.get(`${ADMIN_END_POINT}msc/log`, {
+    function fetchInfos(dateFrom: Date, dateTo: Date) {
+
+        const date_from = `${dateFrom.getFullYear()}-${dateFrom.getMonth() + 1}-${dateFrom.getDate()}`
+        const date_to = `${dateTo.getFullYear()}-${dateTo.getMonth() + 1}-${dateTo.getDate()}`
+
+        axios.get(`${ADMIN_END_POINT}msc/log?date_from=${date_from}&date_to=${date_to}`, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }
