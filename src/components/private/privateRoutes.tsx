@@ -5,17 +5,14 @@ import {
     Route,
 } from "react-router-dom";
 import Main from './main/main'
-import axios from 'axios'
-import { END_POINT } from '../../constants/endpoint';
 import Post from './post/post'
-import Cryptr from 'cryptr'
-const cryptr = new Cryptr('asdasd')
+import autoLogin from '../../utils/autologin';
 
 
 export default function App() {
 
     useEffect(() => {
-        // autoLogin()
+        autoLogin()
     }, [])
 
     return (
@@ -35,9 +32,4 @@ export default function App() {
         </Router>
     );
 
-    function autoLogin() {
-
-        // 필요한가?
-
-    }
 }
