@@ -7,6 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import './tableStyle.scss'
 import { Info } from '../../constants/types';
 
 const useStyles = makeStyles({
@@ -35,11 +36,14 @@ const SimpleTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTimeInp
                         <TableCell onClick={noLabelTapped} align="right">이름</TableCell>
                         <TableCell align="right">학번</TableCell>
                         <TableCell align="right">전공</TableCell>
-                        <TableCell align="right">입실</TableCell>
-                        <TableCell align="right">퇴실</TableCell>
-                        <TableCell align="right">분환산</TableCell>
-                        <TableCell align="right">분환산</TableCell>
-                        <TableCell align="right">ip address</TableCell>
+                        <TableCell align="right">자동/수동</TableCell>
+                        <TableCell align="right">접근 시각</TableCell>
+                        <TableCell align="right">인증 관리자</TableCell>
+                        <TableCell align="right">관리자 부서</TableCell>
+                        <TableCell align="right">데이터 생성시각</TableCell>
+                        <TableCell align="right">데이터 업데이트시각</TableCell>
+                        <TableCell align="right">인증 ip</TableCell>
+                        <TableCell align="right">집계 제외</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -51,13 +55,14 @@ const SimpleTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTimeInp
                             <TableCell align="right">{info.user_name}</TableCell>
                             <TableCell align="right">{info.user_univ_id}</TableCell>
                             <TableCell align="right">{info.user_major}</TableCell>
+                            <TableCell align="right">{info.is_manual ? <span className="table__red_text">수동</span> : <span>자동</span>}</TableCell>
                             <TableCell align="right">{info.access_datetime}</TableCell>
-                            <TableCell onClick={() => {
-                                turnOnExitTimeInput("준비중")
-                            }} align="right">{"준비중"}</TableCell>
-                            <TableCell align="right">{new Date(info.access_datetime).getHours() + ":" + new Date(info.access_datetime).getMinutes()}</TableCell>
-                            <TableCell align="right">{"준비중"}</TableCell>
+                            <TableCell align="right">{info.admin_id}</TableCell>
+                            <TableCell align="right">{info.admin_dept}</TableCell>
+                            <TableCell align="right">{info.created_datetime}</TableCell>
+                            <TableCell align="right">{info.updated_datetime}</TableCell>
                             <TableCell align="right">{info.ip_addr}</TableCell>
+                            <TableCell align="right">{info.disabled_aggregate ? <img className="checked_mark" src="/checked.png" /> : ""}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

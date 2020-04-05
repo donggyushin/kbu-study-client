@@ -2,6 +2,7 @@ export interface Info {
     access_id: number
     access_datetime: string
     created_datetime: string
+    updated_datetime: string
     disabled_aggregate: boolean
     user_name: string
     user_univ_id: string

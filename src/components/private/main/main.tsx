@@ -16,14 +16,33 @@ import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
 } from '@material-ui/pickers';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 var repeat: any
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        formControl: {
+            margin: theme.spacing(1),
+            minWidth: 120,
+        },
+        selectEmpty: {
+            marginTop: theme.spacing(2),
+        },
+    }),
+);
 
 const Main = () => {
 
 
-
+    // 여기서 infos 는 사용자 데이터라고 생각하면 됨
     const [infos, setInfos] = useState<Info[]>([])
+    // 사용자 데이터를 받아올때마다 현재 사용자들만 따로 분류해놓은 데이터가 필요함
+    const [currentUsers, setCurrentUsers] = useState<Info[]>([])
     const [searchedInfos, setSearchedInfos] = useState<Info[]>([])
     const [searching, setSearching] = useState(false)
     const [dialogTitle, setDialogTitle] = useState("")
@@ -37,11 +56,17 @@ const Main = () => {
         new Date(),
     );
     const [selectedToDate, setSelectedToDate] = useState<Date | null>(new Date())
+    const classes = useStyles();
+    const [category, setCategory] = React.useState('');
 
-
+    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setCategory(event.target.value as string);
+    };
 
 
     useEffect(() => {
+
+        getTodaysCurrentUsers()
 
         if (selectedToDate && selectedFromDate) {
             fetchInfosFunction(selectedFromDate, selectedToDate)
@@ -73,12 +98,9 @@ const Main = () => {
             </Link>
             <button onClick={logoutPressed}>로그아웃</button>
         </div>
-        <div className="search_bar__container">
-            <TextField id="outlined-basic" label="검색" variant="outlined" onChange={textFieldHandler} />
-        </div>
-        <div className="date__picker">
+        <div className="toolbars_container">
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <Grid container justify="space-around">
+                <Grid className="grid" container justify="space-around">
                     <KeyboardDatePicker
                         disableToolbar
                         variant="inline"
@@ -105,17 +127,46 @@ const Main = () => {
                             'aria-label': 'change date',
                         }}
                     />
+                    <TextField id="standard-basic" className="standard-basic" label="검색" variant="standard" onChange={textFieldHandler} />
+                    <FormControl className={classes.formControl}>
+                        <InputLabel id="demo-simple-select-label">검색조건</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={category}
+                            onChange={handleChange}
+                        >
+                            <MenuItem value={"user_name"}>이름</MenuItem>
+                            <MenuItem value={"user_univ_id"}>학번</MenuItem>
+                            <MenuItem value={"user_major"}>전공</MenuItem>
+                            <MenuItem value={"admin_id"}>인증 관리자</MenuItem>
+                            <MenuItem value={"admin_dept"}>관리자 부서</MenuItem>
+                            <MenuItem value={"ip_addr"}>인증 ip</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Grid>
             </MuiPickersUtilsProvider>
         </div>
-        <div className="view__container">
-
-            {searching ? <SimpleTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={searchedInfos} /> : <SimpleTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={infos} />}
-
-
-            {dialog && <AlertDialog title={dialogTitle} message={dialogMessage} callback={closeAlertAndLogout} />}
+        <div className="view_container_container">
+            <div className="view__container">
+                <div className="label">
+                    현재 사용자
+                    </div>
+                <SimpleTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={currentUsers} />
+            </div>
         </div>
+        <div className="view_container_container">
+            <div className="view__container">
+                <div className="label">
+                    전체 사용자
+                </div>
+                {searching ? <SimpleTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={searchedInfos} /> : <SimpleTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={infos} />}
 
+
+                {dialog && <AlertDialog title={dialogTitle} message={dialogMessage} callback={closeAlertAndLogout} />}
+            </div>
+
+        </div>
         <button onClick={excelDownButtonTapped} className="excel_down_button">
             엑셀다운
         </button>
@@ -210,28 +261,151 @@ const Main = () => {
 
     function textFieldHandler(event: React.ChangeEvent<HTMLInputElement>) {
         const value = event.target.value
-        if (value === "") {
-            setSearchedInfos([])
-            setSearching(false)
-            return
+
+        let searchedInfos = []
+
+
+
+        switch (category) {
+            case "user_name":
+
+                searchedInfos = infos.filter((info) => {
+                    if (info.user_name.includes(value)) {
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                break;
+            case "user_univ_id":
+                searchedInfos = infos.filter((info) => {
+                    if (info.user_univ_id.includes(value)) {
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                break;
+            case "user_major":
+                searchedInfos = infos.filter((info) => {
+                    if (info.user_major.includes(value)) {
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                break;
+            case "admin_id":
+                searchedInfos = infos.filter((info) => {
+                    if (info.admin_id.includes(value)) {
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                break;
+            case "admin_dept":
+                searchedInfos = infos.filter((info) => {
+                    if (info.admin_dept.includes(value)) {
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                break;
+            case "ip_addr":
+                searchedInfos = infos.filter((info) => {
+                    if (info.ip_addr.includes(value)) {
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                break;
+            default:
+                setSearching(false)
+                searchedInfos = infos
+                break;
         }
-
-        const searchedInfos = infos.filter((info) => {
-
-
-            if (info.user_name.includes(value) || info.user_major.includes(value)
-                || info.admin_id.includes(value) || info.admin_dept.includes(value)
-                || info.user_univ_id.includes(value) || info.ip_addr.includes(value)
-            ) {
-                return true
-            } else {
-                return false
-            }
-
-        })
 
         setSearchedInfos(searchedInfos)
         setSearching(true)
+        return
+    }
+
+    function getTodaysCurrentUsers() {
+        const date1 = new Date()
+        const date2 = new Date()
+
+        const date_from = `${date1.getFullYear()}-${date1.getMonth() + 1}-${date1.getDate()}`
+        const date_to = `${date2.getFullYear()}-${date2.getMonth() + 1}-${date2.getDate()}`
+
+        axios.get(`${ADMIN_END_POINT}msc/log?date_from=${date_from}&date_to=${date_to}`, {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        }).then(res => {
+            if (res.status === 200) {
+                let todayUsers = res.data.data.data as Info[]
+                todayUsers = todayUsers.reverse()
+                let currentUsersIds: String[] = []
+                let currentUsers: Info[] = []
+
+                // 중복없이 유저들의 학번을 담고 있는 데이터셋을 만들자. 
+                let user_univ_ids: String[] = []
+                for (let i = 0; i < todayUsers.length; i++) {
+                    const user = todayUsers[i];
+                    if (user_univ_ids.includes(user.user_univ_id) == false) {
+                        user_univ_ids.push(user.user_univ_id)
+                    }
+                }
+
+
+                // 각각의 학번들마다 todayUsers에 면번 포함되어있는지를 카운트해준다. 
+                for (let i = 0; i < user_univ_ids.length; i++) {
+                    const user_univ_id = user_univ_ids[i];
+                    let count = 0
+                    todayUsers.map((user) => {
+                        if (user.user_univ_id == user_univ_id) {
+                            count++
+                        }
+                    })
+
+                    // 만약에 count가 홀수개라면 현재 사용중인 유저의 id이다. 
+                    if (count % 2 == 1) {
+                        currentUsersIds.push(user_univ_id)
+                    }
+                }
+
+
+                // 해당 id 값을 가진 유저들을 가장 최근 데이터만 한번씩만 골라낸다. 
+                for (let i = 0; i < currentUsersIds.length; i++) {
+                    const user_id = currentUsersIds[i];
+                    for (let i = 0; i < todayUsers.length; i++) {
+                        const todayUser = todayUsers[i];
+                        if (todayUser.user_univ_id == user_id) {
+                            currentUsers.push(todayUser)
+                            break;
+                        }
+                    }
+                }
+
+                // 현재 사용중인 유저들
+                setCurrentUsers(currentUsers)
+
+            } else {
+                console.log(res)
+                setDialogTitle("성서봇입니다")
+                setDialogMessage("에러 발생 부분 처리중")
+                setDialog(true)
+            }
+        }).catch(err => {
+            console.log(err)
+            setDialogTitle("성서봇입니다")
+            setDialogMessage("에러 발생 부분 처리중")
+            setDialog(true)
+        })
+
     }
 
     function fetchInfos(dateFrom: Date, dateTo: Date) {
@@ -247,20 +421,18 @@ const Main = () => {
             .then(res => {
                 if (res.status === 200) {
                     const infos = res.data.data.data as Info[]
-                    console.log("res: ", res)
-                    console.log("infos: ", infos)
                     infos.sort(compareNumber2)
                     setInfos(infos)
                 } else {
                     setDialogTitle("성서봇입니다")
-                    setDialogMessage("현재 다른 기기에서 접속한 유저가 있습니다...")
+                    setDialogMessage("에러 발생 부분 처리중")
                     setDialog(true)
                 }
             })
             .catch(err => {
                 console.error(err)
                 setDialogTitle("성서봇입니다")
-                setDialogMessage("현재 다른 기기에서 접속한 유저가 있습니다...")
+                setDialogMessage("에러 발생 부분 처리중")
                 setDialog(true)
             })
     }

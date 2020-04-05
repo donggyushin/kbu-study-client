@@ -40,15 +40,17 @@ const ExcelDown: React.FC<IProps> = ({
     const className = 'class-name-for-style',
         filename = 'Excel-file',
         fields = {
-            "no": "No",
+            "access_id": "No",
+            "access_datetime": "접근 시각",
+            "created_datetime": "데이터 생성시각",
+            "updated_datetime": "데이터 업데이트시각",
+            "disabled_aggregate": "집계 제외",
             "user_name": "이름",
             "user_univ_id": "학번",
-            "user_major": "전공",
-            "access_time": "접근시간",
-            "admin_id": "관리자",
-            "admin_department": "관리자 부서",
-            "ip_addr": "아이피",
-            "access_type": "접근 유형"
+            "admin_id": "인증 관리자",
+            "admin_dept": "관리자 부서",
+            "is_manual": "자동/수동",
+            "ip_addr": "인증 ip"
         },
         style = {
             padding: "5px"
