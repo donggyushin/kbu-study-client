@@ -21,6 +21,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import CurrentUserTable from '../currentUserTable';
 
 var repeat: any
 
@@ -119,14 +120,22 @@ const Main = () => {
     return <div className="private__main__container">
         <div className="navigation__bar">
             <div className="button active">
-                view
+                조회
             </div>
+            <Link to="/aggregate" style={{
+                textDecoration: "none",
+                color: "black"
+            }}>
+                <div className="button">
+                    집계
+            </div>
+            </Link>
             <Link to="/post" style={{
                 textDecoration: "none",
                 color: "black"
             }}>
                 <div className="button">
-                    post
+                    추가
             </div>
             </Link>
             <button onClick={logoutPressed}>로그아웃</button>
@@ -185,7 +194,7 @@ const Main = () => {
                 <div className="label">
                     현재 사용자
                     </div>
-                <SimpleTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={currentUsers} />
+                <CurrentUserTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={currentUsers} />
             </div>
         </div>
         <div className="view_container_container">
@@ -367,8 +376,9 @@ const Main = () => {
     }
 
     function getTodaysCurrentUsers() {
-        const date1 = new Date()
-        const date2 = new Date()
+
+        const date1 = new Date('')
+        const date2 = new Date('')
 
         const date_from = `${date1.getFullYear()}-${date1.getMonth() + 1}-${date1.getDate()}`
         const date_to = `${date2.getFullYear()}-${date2.getMonth() + 1}-${date2.getDate()}`

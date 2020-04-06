@@ -7,12 +7,21 @@ import {
 import Main from './main/main'
 import Post from './post/post'
 import autoLogin from '../../utils/autologin';
+import Aggregate from './aggregate/aggregate';
 
+var repeat: any
 
 export default function App() {
 
     useEffect(() => {
         autoLogin()
+        repeat = setInterval(() => {
+            autoLogin()
+        }, 1000 * 60 * 10)
+
+        return function cleanup() {
+            clearInterval(repeat)
+        }
     }, [])
 
     return (
@@ -23,6 +32,9 @@ export default function App() {
                 </Route>
                 <Route path="/post" >
                     <Post />
+                </Route>
+                <Route path="/aggregate">
+                    <Aggregate />
                 </Route>
                 <Route>
                     <Main />

@@ -1,3 +1,19 @@
+interface detail {
+    from: string
+    to: string
+    seconds: number
+}
+
+interface Value {
+    total_seconds: number
+    detail: detail[]
+}
+
+export interface IAggregate {
+    univ_id: string
+    value: Value
+}
+
 export interface Info {
     access_id: number
     access_datetime: string

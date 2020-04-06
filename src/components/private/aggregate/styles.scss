@@ -1,4 +1,4 @@
-.private__main__container {
+.aggregate__container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,16 +25,22 @@
         }
     }
 
-    .post__container {
-        margin-top: 50px;
-        .post__form {
-            display: flex;
-            align-items: center;
-            .select {
-                width: 190px;
+    .aggregate_detail_container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba($color: #000000, $alpha: 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 100px;
+        .container {
+            .top {
+                margin-bottom: 20px;
             }
         }
     }
 
-   
 }
