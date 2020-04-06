@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { IAggregate } from '../../../constants/types';
+const humanizeDuration = require('humanize-duration')
 
 const useStyles = makeStyles({
     table: {
@@ -49,7 +50,7 @@ const AggregateTable: React.FC<IProps> = ({
                                 {i + 1}
                             </TableCell>
                             <TableCell align="right">{row.univ_id}</TableCell>
-                            <TableCell align="right">{row.value.total_seconds}</TableCell>
+                            <TableCell align="right">{humanizeDuration(row.value.total_seconds * 1000)}</TableCell>
                             <TableCell align="right">{row.value.detail[0].from}</TableCell>
                             <TableCell align="right">{row.value.detail[row.value.detail.length - 1].to}</TableCell>
                         </TableRow>

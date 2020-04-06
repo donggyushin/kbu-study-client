@@ -151,24 +151,37 @@ const Post = () => {
 
         const token = localStorage.getItem("token")
 
-        console.log(selectedDate?.toString())
 
+        const access_datetime = `${selectedDate?.getFullYear()}-${selectedDate!.getMonth() + 1}-${selectedDate?.getDate()} ${selectedDate?.getHours()}:${selectedDate?.getMinutes()}:${selectedDate?.getSeconds()}`
         axios.post(`${ADMIN_END_POINT}msc/log`, {
             user_name: name,
             user_univ_id: sid,
             user_major: major,
-            access_datetime: selectedDate?.toString()
+            access_datetime: access_datetime
         }, {
             headers: {
                 Authorization: token
             }
         })
             .then(res => {
-                console.log(res)
+                if (res.status === 200) {
+                    console.log(res)
+                    initData()
+                    alert("데이터 입력 성공")
+                } else {
+                    alert("데이터 입력 실패")
+                }
             })
             .catch(err => {
                 console.log(err)
             })
+    }
+
+    function initData() {
+        setName("")
+        setSid("")
+        setMajor("")
+
     }
 
     function logoutPressed() {

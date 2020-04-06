@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { IAggregate } from '../../../constants/types';
+import humanizeDuration from 'humanize-duration'
 
 const useStyles = makeStyles({
     table: {
@@ -57,8 +58,8 @@ const AggregateDetail: React.FC<IProps> = ({
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>번호</TableCell>
-                                <TableCell align="right">학번</TableCell>
+
+                                <TableCell>학번</TableCell>
                                 <TableCell align="right">총 집계 시간</TableCell>
                                 <TableCell align="right">시작</TableCell>
                                 <TableCell align="right">종료</TableCell>
@@ -70,7 +71,7 @@ const AggregateDetail: React.FC<IProps> = ({
                                     {aggregate.univ_id}
                                 </TableCell>
 
-                                <TableCell align="right">{aggregate.value.total_seconds}</TableCell>
+                                <TableCell align="right">{humanizeDuration(aggregate.value.total_seconds * 1000)}</TableCell>
                                 <TableCell align="right">{aggregate.value.detail[0].from}</TableCell>
                                 <TableCell align="right">{aggregate.value.detail[aggregate.value.detail.length - 1].to}</TableCell>
                             </TableRow>
@@ -101,7 +102,7 @@ const AggregateDetail: React.FC<IProps> = ({
                                     </TableCell>
                                     <TableCell align="right">{data.from}</TableCell>
                                     <TableCell align="right">{data.to}</TableCell>
-                                    <TableCell align="right">{data.seconds}</TableCell>
+                                    <TableCell align="right">{humanizeDuration(data.seconds * 1000)}</TableCell>
                                 </TableRow>
                             })}
                         </TableBody>
