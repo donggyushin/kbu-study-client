@@ -121,6 +121,9 @@ const Main = () => {
             logoutPressed()
         }
 
+        etag1 = ""
+        etag2 = ""
+
         return function cleanup() {
             clearInterval(repeat)
             clearInterval(repeat2)
