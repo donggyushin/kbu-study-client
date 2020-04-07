@@ -14,6 +14,7 @@ import { Info } from '../../../constants/types';
 import { IAggregate } from '../../../constants/types'
 import AggregateTable from './aggregateTable';
 import AggregateDetail from './aggregateDetail';
+import ExcelDown from './excelDown';
 
 const Aggregate: React.FC = () => {
 
@@ -24,6 +25,7 @@ const Aggregate: React.FC = () => {
     const [toDate, setToDate] = React.useState<Date | null>(new Date())
     const [aggregates, setAggregates] = useState<IAggregate[]>([])
     const [selectedAggregate, setSelectedAggregate] = useState<IAggregate>()
+    const [excelDownView, setExcelDownView] = useState(false)
 
     const handleDateChange = (date: Date | null) => {
         setFromDate(date);
@@ -105,9 +107,21 @@ const Aggregate: React.FC = () => {
         <div className="aggregate_table_container">
             <AggregateTable selectAggregate={selectAggregate} aggregates={aggregates} />
         </div>
+        <button onClick={excelDownButtonTapped} className="excel_down_button">
+            엑셀 다운로드
+        </button>
         {selectedAggregate && <AggregateDetail deselectAggregate={deselectAggregate} aggregate={selectedAggregate} />}
+        {excelDownView && <ExcelDown aggregates={aggregates} turnOfExcelDown={turnOfExcelDown} />}
 
     </div>
+
+    function turnOfExcelDown() {
+        setExcelDownView(false)
+    }
+
+    function excelDownButtonTapped() {
+        setExcelDownView(true)
+    }
 
     function deselectAggregate() {
         setSelectedAggregate(undefined)

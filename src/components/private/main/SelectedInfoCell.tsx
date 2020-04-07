@@ -121,7 +121,7 @@ const SelectedInfoCell: React.FC<IProps> = ({ info, unSelectInfoCell, changeAggr
                     if (res.status === 204) {
                         changeAggregateOfInfo(info.access_id)
                         let updatedInfo = selectedInfo
-                        updatedInfo.disabled_aggregate = !updatedInfo.disabled_aggregate
+                        updatedInfo.disabled_aggregate = false
                         setSelectedInfo(updatedInfo)
                     }
                 })
@@ -149,7 +149,7 @@ const SelectedInfoCell: React.FC<IProps> = ({ info, unSelectInfoCell, changeAggr
                     if (res.status === 204) {
                         changeAggregateOfInfo(info.access_id)
                         let updatedInfo = selectedInfo
-                        updatedInfo.disabled_aggregate = !updatedInfo.disabled_aggregate
+                        updatedInfo.disabled_aggregate = true
                         setSelectedInfo(updatedInfo)
 
                     }

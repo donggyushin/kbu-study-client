@@ -26,6 +26,8 @@ import SelectedInfoCell from './SelectedInfoCell';
 
 var repeat: any
 var repeat2: any
+var etag1: string
+var etag2: string
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -61,7 +63,8 @@ const Main = () => {
     const [selectedToDate, setSelectedToDate] = useState<Date | null>(new Date())
     const classes = useStyles();
     const [category, setCategory] = React.useState('');
-    const [selectedInfo, setSelectedInfo] = useState<Info>();
+    const [selectedInfo, setSelectedInfo] = useState<Info>()
+
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setCategory(event.target.value as string);
@@ -408,20 +411,29 @@ const Main = () => {
 
     function getTodaysCurrentUsers() {
 
-        const date1 = new Date('')
-        const date2 = new Date('')
+        const date1 = new Date()
+        const date2 = new Date()
 
         const date_from = `${date1.getFullYear()}-${date1.getMonth() + 1}-${date1.getDate()}`
         const date_to = `${date2.getFullYear()}-${date2.getMonth() + 1}-${date2.getDate()}`
-
         axios.get(`${ADMIN_END_POINT}msc/log?date_from=${date_from}&date_to=${date_to}`, {
             headers: {
-                Authorization: localStorage.getItem("token")
+                Authorization: localStorage.getItem("token"),
+                "If-None-Match": etag2
             }
         }).then(res => {
             if (res.status === 200) {
+                const etag = res.headers['etag']
+                etag2 = etag
                 let todayUsers = res.data.data.data as Info[]
                 todayUsers = todayUsers.reverse()
+                todayUsers = todayUsers.filter((user) => {
+                    if (user.disabled_aggregate) {
+                        return false
+                    } else {
+                        return true
+                    }
+                })
                 let currentUsersIds: String[] = []
                 let currentUsers: Info[] = []
 
@@ -474,10 +486,7 @@ const Main = () => {
                 setDialog(true)
             }
         }).catch(err => {
-            console.log(err)
-            setDialogTitle("성서봇입니다")
-            setDialogMessage("에러 발생 부분 처리중")
-            setDialog(true)
+
         })
 
     }
@@ -487,27 +496,31 @@ const Main = () => {
         const date_from = `${dateFrom.getFullYear()}-${dateFrom.getMonth() + 1}-${dateFrom.getDate()}`
         const date_to = `${dateTo.getFullYear()}-${dateTo.getMonth() + 1}-${dateTo.getDate()}`
 
+
         axios.get(`${ADMIN_END_POINT}msc/log?date_from=${date_from}&date_to=${date_to}`, {
             headers: {
-                Authorization: localStorage.getItem("token")
+                "Authorization": localStorage.getItem("token"),
+                "If-None-Match": etag1
             }
         })
             .then(res => {
                 if (res.status === 200) {
                     const infos = res.data.data.data as Info[]
                     infos.sort(compareNumber2)
+                    const etag = res.headers['etag']
+                    etag1 = etag
                     setInfos(infos)
-                } else {
+                } else if (res.status === 304) {
+
+                    return
+                }
+                else {
                     setDialogTitle("성서봇입니다")
                     setDialogMessage("에러 발생 부분 처리중")
                     setDialog(true)
                 }
-            })
-            .catch(err => {
-                console.error(err)
-                setDialogTitle("성서봇입니다")
-                setDialogMessage("에러 발생 부분 처리중")
-                setDialog(true)
+            }).catch(err => {
+                console.log("캐싱")
             })
     }
 

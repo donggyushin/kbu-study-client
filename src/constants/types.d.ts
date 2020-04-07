@@ -14,6 +14,14 @@ export interface IAggregate {
     value: Value
 }
 
+export interface IConvertedAggregate {
+    no: number
+    univ_id: string
+    total_seconds: number
+    start: string
+    end: string
+}
+
 export interface Info {
     access_id: number
     access_datetime: string
