@@ -90,7 +90,7 @@ const Post = () => {
                         <MenuItem value={'컴퓨터소프트웨어학과'}>컴퓨터소프트웨어학과</MenuItem>
                         <MenuItem value={'영유아보육학과'}>영유아보육학과</MenuItem>
                         <MenuItem value={'사회복지학과'}>사회복지학과</MenuItem>
-                        <MenuItem value={'신학과'}>신학과</MenuItem>
+                        <MenuItem value={'성서학과'}>성서학과</MenuItem>
                         <MenuItem value={'간호학과'}>간호학과</MenuItem>
                     </Select>
                 </FormControl>
