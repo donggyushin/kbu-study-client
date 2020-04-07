@@ -78,7 +78,7 @@ const Aggregate: React.FC = () => {
                         format="MM/dd/yyyy"
                         margin="normal"
                         id="date-picker-inline"
-                        label="Date picker inline"
+                        label="검색 시작일"
                         value={fromDate}
                         onChange={handleDateChange}
                         KeyboardButtonProps={{
@@ -91,7 +91,7 @@ const Aggregate: React.FC = () => {
                         format="MM/dd/yyyy"
                         margin="normal"
                         id="date-picker-inline"
-                        label="Date picker inline"
+                        label="검색 마지막일"
                         value={toDate}
                         onChange={handleToDateChange}
                         KeyboardButtonProps={{

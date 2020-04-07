@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { IAggregate } from '../../../constants/types';
+import milisecondsConverter from '../../../utils/milisecondsConverter';
 const humanizeDuration = require('humanize-duration')
 
 const useStyles = makeStyles({
@@ -53,7 +54,7 @@ const AggregateTable: React.FC<IProps> = ({
                                 </TableCell>
 
                                 <TableCell align="right">{row.univ_id}</TableCell>
-                                <TableCell align="right">{humanizeDuration(row.value.total_seconds * 1000)}</TableCell>
+                                <TableCell align="right">{milisecondsConverter(row.value.total_seconds * 1000)}</TableCell>
                                 <TableCell align="right">{row.value.detail[0] ? row.value.detail[0].from : "데이터 없음"}</TableCell>
                                 <TableCell align="right">{row.value.detail[row.value.detail.length - 1] ? row.value.detail[row.value.detail.length - 1].to : "데이터 없음"}</TableCell>
                             </TableRow>
