@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -22,9 +22,10 @@ interface IProps {
     infos: Info[]
     noLabelTapped: () => void
     turnOnExitTimeInput: (text: string) => void
+    selectInfoCell: (info: Info) => void
 }
 
-const SimpleTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTimeInput }) => {
+const SimpleTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTimeInput, selectInfoCell }) => {
     const classes = useStyles();
 
     return (
@@ -40,17 +41,16 @@ const SimpleTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTimeInp
                         <TableCell align="right">접근 시각</TableCell>
                         <TableCell align="right">인증 관리자</TableCell>
                         <TableCell align="right">관리자 부서</TableCell>
-                        <TableCell align="right">데이터 생성시각</TableCell>
-                        <TableCell align="right">데이터 업데이트시각</TableCell>
-                        <TableCell align="right">인증 ip</TableCell>
                         <TableCell align="right">집계 제외</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {infos.map((info, i) => (
-                        <TableRow key={i}>
+                        <TableRow onClick={() => {
+                            selectInfoCell(info)
+                        }} key={i}>
                             <TableCell component="th" scope="row">
-                                {info.access_id}
+                                {infos.length - i}
                             </TableCell>
                             <TableCell align="right">{info.user_name}</TableCell>
                             <TableCell align="right">{info.user_univ_id}</TableCell>
@@ -59,9 +59,6 @@ const SimpleTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTimeInp
                             <TableCell align="right">{info.access_datetime}</TableCell>
                             <TableCell align="right">{info.admin_id}</TableCell>
                             <TableCell align="right">{info.admin_dept}</TableCell>
-                            <TableCell align="right">{info.created_datetime}</TableCell>
-                            <TableCell align="right">{info.updated_datetime}</TableCell>
-                            <TableCell align="right">{info.ip_addr}</TableCell>
                             <TableCell align="right">{info.disabled_aggregate ? <img className="checked_mark" src="/checked.png" /> : ""}</TableCell>
                         </TableRow>
                     ))}

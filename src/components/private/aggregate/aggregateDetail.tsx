@@ -72,8 +72,8 @@ const AggregateDetail: React.FC<IProps> = ({
                                 </TableCell>
 
                                 <TableCell align="right">{humanizeDuration(aggregate.value.total_seconds * 1000)}</TableCell>
-                                <TableCell align="right">{aggregate.value.detail[0].from}</TableCell>
-                                <TableCell align="right">{aggregate.value.detail[aggregate.value.detail.length - 1].to}</TableCell>
+                                <TableCell align="right">{aggregate.value.detail[0] ? aggregate.value.detail[0].from : "데이터 없음"}</TableCell>
+                                <TableCell align="right">{aggregate.value.detail[aggregate.value.detail.length - 1] ? aggregate.value.detail[aggregate.value.detail.length - 1].to : "데이터 없음"}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -102,7 +102,7 @@ const AggregateDetail: React.FC<IProps> = ({
                                     </TableCell>
                                     <TableCell align="right">{data.from}</TableCell>
                                     <TableCell align="right">{data.to}</TableCell>
-                                    <TableCell align="right">{humanizeDuration(data.seconds * 1000)}</TableCell>
+                                    <TableCell align="right">{humanizeDuration(data.seconds)}</TableCell>
                                 </TableRow>
                             })}
                         </TableBody>

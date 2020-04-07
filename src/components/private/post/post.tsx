@@ -102,7 +102,7 @@ const Post = () => {
                             format="MM/dd/yyyy"
                             margin="normal"
                             id="date-picker-inline"
-                            label="Date picker inline"
+                            label="날짜를 지정해주세요"
                             value={selectedDate}
                             onChange={handleDateChange}
                             KeyboardButtonProps={{
@@ -112,7 +112,7 @@ const Post = () => {
                         <KeyboardTimePicker
                             margin="normal"
                             id="time-picker"
-                            label="Time picker"
+                            label="시각을 지정해주세요"
                             value={selectedDate}
                             onChange={handleDateChange}
                             KeyboardButtonProps={{

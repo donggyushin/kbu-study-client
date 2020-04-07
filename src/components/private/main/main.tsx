@@ -22,8 +22,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import CurrentUserTable from '../currentUserTable';
+import SelectedInfoCell from './SelectedInfoCell';
 
 var repeat: any
+var repeat2: any
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -59,6 +61,7 @@ const Main = () => {
     const [selectedToDate, setSelectedToDate] = useState<Date | null>(new Date())
     const classes = useStyles();
     const [category, setCategory] = React.useState('');
+    const [selectedInfo, setSelectedInfo] = useState<Info>();
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setCategory(event.target.value as string);
@@ -87,7 +90,12 @@ const Main = () => {
 
                         if (token) {
                             localStorage.setItem("token", token)
+
+
                             getTodaysCurrentUsers()
+                            repeat2 = setInterval(() => {
+                                getTodaysCurrentUsers()
+                            }, 3000)
 
                             if (selectedToDate && selectedFromDate) {
                                 fetchInfosFunction(selectedFromDate, selectedToDate)
@@ -112,6 +120,7 @@ const Main = () => {
 
         return function cleanup() {
             clearInterval(repeat)
+            clearInterval(repeat2)
         }
     }, [])
 
@@ -197,12 +206,13 @@ const Main = () => {
                 <CurrentUserTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={currentUsers} />
             </div>
         </div>
+
         <div className="view_container_container">
             <div className="view__container">
                 <div className="label">
                     전체 사용자
                 </div>
-                {searching ? <SimpleTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={searchedInfos} /> : <SimpleTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={infos} />}
+                {searching ? <SimpleTable selectInfoCell={selectInfoCell} turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={searchedInfos} /> : <SimpleTable selectInfoCell={selectInfoCell} turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={infos} />}
 
 
                 {dialog && <AlertDialog title={dialogTitle} message={dialogMessage} callback={closeAlertAndLogout} />}
@@ -214,11 +224,32 @@ const Main = () => {
         </button>
         {(excelDownView && searching) && <ExcelDown turnOffExcelDownView={turnOffExcelDownView} datas={searchedInfos} />}
         {(excelDownView && !searching) && <ExcelDown turnOffExcelDownView={turnOffExcelDownView} datas={infos} />}
+        {selectedInfo && <SelectedInfoCell unSelectInfoCell={unSelectInfoCell} info={selectedInfo} changeAggregateOfInfo={changeAggregateOfInfo} />}
 
         {exitTimeInput && <ExitTimeInput
             turnOfExitTimeInput={turnOfExitTimeInput}
             handleExitTimeString={handleExitTimeString} exitTimeString={exitTimeString} />}
     </div>
+
+    function changeAggregateOfInfo(access_id: number) {
+        const updatedInfos = infos.map((info) => {
+            if (info.access_id === access_id) {
+                info.disabled_aggregate = !info.disabled_aggregate
+                return info
+            } else {
+                return info
+            }
+        })
+        setInfos(updatedInfos)
+    }
+
+    function unSelectInfoCell() {
+        setSelectedInfo(undefined)
+    }
+
+    function selectInfoCell(info: Info) {
+        setSelectedInfo(info)
+    }
 
     function fetchInfosFunction(dateFrom: Date, dateTo: Date) {
 

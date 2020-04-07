@@ -41,21 +41,25 @@ const AggregateTable: React.FC<IProps> = ({
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {aggregates.map((row, i) => (
+                    {aggregates.map((row, i) => {
+                        console.log("row: ", row)
+                        return (
 
-                        <TableRow onClick={() => {
-                            selectAggregate(aggregates[i])
-                        }} key={i}>
-                            <TableCell component="th" scope="row">
-                                {i + 1}
-                            </TableCell>
-                            <TableCell align="right">{row.univ_id}</TableCell>
-                            <TableCell align="right">{humanizeDuration(row.value.total_seconds * 1000)}</TableCell>
-                            <TableCell align="right">{row.value.detail[0].from}</TableCell>
-                            <TableCell align="right">{row.value.detail[row.value.detail.length - 1].to}</TableCell>
-                        </TableRow>
+                            <TableRow onClick={() => {
+                                selectAggregate(aggregates[i])
+                            }} key={i}>
+                                <TableCell component="th" scope="row">
+                                    {i + 1}
+                                </TableCell>
 
-                    ))}
+                                <TableCell align="right">{row.univ_id}</TableCell>
+                                <TableCell align="right">{humanizeDuration(row.value.total_seconds * 1000)}</TableCell>
+                                <TableCell align="right">{row.value.detail[0] ? row.value.detail[0].from : "데이터 없음"}</TableCell>
+                                <TableCell align="right">{row.value.detail[row.value.detail.length - 1] ? row.value.detail[row.value.detail.length - 1].to : "데이터 없음"}</TableCell>
+                            </TableRow>
+
+                        )
+                    })}
                 </TableBody>
             </Table>
         </TableContainer>

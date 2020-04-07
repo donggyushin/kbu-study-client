@@ -43,15 +43,15 @@ const CurrentUserTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTi
                         <TableCell align="right">관리자 부서</TableCell>
                         {/* <TableCell align="right">데이터 생성시각</TableCell>
                         <TableCell align="right">데이터 업데이트시각</TableCell> */}
-                        <TableCell align="right">인증 ip</TableCell>
-                        <TableCell align="right">집계 제외</TableCell>
+                        {/* <TableCell align="right">인증 ip</TableCell> */}
+                        {/* <TableCell align="right">집계 제외</TableCell> */}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {infos.map((info, i) => (
                         <TableRow key={i}>
                             <TableCell component="th" scope="row">
-                                {info.access_id}
+                                {infos.length - i}
                             </TableCell>
                             <TableCell align="right">{info.user_name}</TableCell>
                             <TableCell align="right">{info.user_univ_id}</TableCell>
@@ -66,8 +66,8 @@ const CurrentUserTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTi
                             <TableCell align="right">{info.admin_dept}</TableCell>
                             {/* <TableCell align="right">{info.created_datetime}</TableCell>
                             <TableCell align="right">{info.updated_datetime}</TableCell> */}
-                            <TableCell align="right">{info.ip_addr}</TableCell>
-                            <TableCell align="right">{info.disabled_aggregate ? <img className="checked_mark" src="/checked.png" /> : ""}</TableCell>
+                            {/* <TableCell align="right">{info.ip_addr}</TableCell> */}
+                            {/* <TableCell align="right">{info.disabled_aggregate ? <img className="checked_mark" src="/checked.png" /> : ""}</TableCell> */}
                         </TableRow>
                     ))}
                 </TableBody>
