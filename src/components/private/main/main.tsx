@@ -28,6 +28,7 @@ var repeat: any
 var repeat2: any
 var etag1: string
 var etag2: string
+var etag3: string
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -61,6 +62,7 @@ const Main = () => {
         new Date(),
     );
     const [selectedToDate, setSelectedToDate] = useState<Date | null>(new Date())
+    const [allDept, setAllDept] = useState(false)
     const classes = useStyles();
     const [category, setCategory] = React.useState('');
     const [selectedInfo, setSelectedInfo] = useState<Info>()
@@ -201,6 +203,12 @@ const Main = () => {
                             <MenuItem value={"ip_addr"}>인증 ip</MenuItem>
                         </Select>
                     </FormControl>
+                    {allDept ? <button id="dept1" onClick={dept1ButtonTappedAgain} className="dept1">
+                        현재부서로그 보기
+                    </button> : <button id="dept1" onClick={dept1ButtonTapped} className="dept1">
+                            전체부서로그 보기
+                    </button>}
+
                 </Grid>
             </MuiPickersUtilsProvider>
         </div>
@@ -236,6 +244,38 @@ const Main = () => {
             turnOfExitTimeInput={turnOfExitTimeInput}
             handleExitTimeString={handleExitTimeString} exitTimeString={exitTimeString} />}
     </div>
+
+    function dept1ButtonTappedAgain() {
+
+        if (selectedFromDate && selectedToDate) {
+            etag3 = ""
+            etag1 = ""
+            clearInterval(repeat)
+            fetchInfos(selectedFromDate, selectedToDate)
+            repeat = setInterval(() => {
+                fetchInfos(selectedFromDate, selectedToDate)
+            }, 3000)
+
+            setAllDept(false)
+
+        }
+    }
+
+    function dept1ButtonTapped() {
+
+        if (selectedFromDate && selectedToDate) {
+            etag3 = ""
+            etag1 = ""
+            clearInterval(repeat)
+            fetchInfosDept1(selectedFromDate, selectedToDate)
+            repeat = setInterval(() => {
+                fetchInfosDept1(selectedFromDate, selectedToDate)
+            }, 3000)
+
+            setAllDept(true)
+
+        }
+    }
 
     function changeAggregateOfInfo(access_id: number) {
         const updatedInfos = infos.map((info) => {
@@ -492,6 +532,26 @@ const Main = () => {
 
         })
 
+    }
+
+    function fetchInfosDept1(dateFrom: Date, dateTo: Date) {
+        const date_from = `${dateFrom.getFullYear()}-${dateFrom.getMonth() + 1}-${dateFrom.getDate()}`
+        const date_to = `${dateTo.getFullYear()}-${dateTo.getMonth() + 1}-${dateTo.getDate()}`
+
+        axios.get(`${ADMIN_END_POINT}msc/log?date_from=${date_from}&date_to=${date_to}`, {
+            headers: {
+                "Authorization": localStorage.getItem("token"),
+                "If-None-Match": etag3
+            }
+        }).then(res => {
+            const infos = res.data.data.data as Info[]
+            infos.sort(compareNumber2)
+            const etag = res.headers['etag']
+            etag3 = etag
+            setInfos(infos)
+        }).catch(err => {
+
+        })
     }
 
     function fetchInfos(dateFrom: Date, dateTo: Date) {
