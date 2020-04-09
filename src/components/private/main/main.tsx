@@ -310,7 +310,7 @@ const Main = () => {
     }
 
     function fetchInfosFunction(dateFrom: Date, dateTo: Date) {
-
+        clearInterval(repeat)
         fetchInfos(dateFrom, dateTo)
         repeat = setInterval(function () { fetchInfos(dateFrom, dateTo) }, 3000);
     }
@@ -332,7 +332,6 @@ const Main = () => {
                     fetchInfosDept1(selectedFromDate, date)
                 }, 3000)
             } else {
-                clearInterval(repeat)
                 fetchInfosFunction(selectedFromDate, date)
             }
         }
@@ -350,7 +349,6 @@ const Main = () => {
                     fetchInfosDept1(date, selectedToDate)
                 }, 3000)
             } else {
-                clearInterval(repeat)
                 fetchInfosFunction(date, selectedToDate)
 
             }
