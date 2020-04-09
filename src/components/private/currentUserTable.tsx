@@ -79,7 +79,7 @@ const CurrentUserTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTi
         const now = new Date()
         const date = new Date(accessTime)
         const diffTime = Math.abs(now.getTime() - date.getTime())
-        const diffDays = Math.ceil(diffTime / (1000 * 60))
+        const diffDays = Math.floor(diffTime / (1000 * 60))
 
         return `${diffDays}분`
     }
