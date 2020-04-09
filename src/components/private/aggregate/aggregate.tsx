@@ -15,7 +15,7 @@ import { IAggregate } from '../../../constants/types'
 import AggregateTable from './aggregateTable';
 import AggregateDetail from './aggregateDetail';
 import ExcelDown from './excelDown';
-import { TextField } from '@material-ui/core'
+import { TextField, Button } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -48,20 +48,31 @@ const Aggregate: React.FC = () => {
     const [excelDownView, setExcelDownView] = useState(false)
     const [searchCategory, setSearchCategory] = React.useState("user_univ_id");
     const [searchText, setSearchText] = React.useState<String>("")
+    const [dept, setDept] = React.useState(false)
 
     const classes = useStyles();
 
     const handleDateChange = (date: Date | null) => {
         setFromDate(date);
         if (date && toDate) {
-            fetchAggregate(date, toDate)
+
+            if (dept) {
+                currentDeptLogButtonTapped(date, toDate)
+            } else {
+                fetchAggregate(date, toDate)
+            }
         }
     };
 
     const handleToDateChange = (date: Date | null) => {
         setToDate(date);
         if (date && fromDate) {
-            fetchAggregate(fromDate, date)
+            if (dept) {
+                currentDeptLogButtonTapped(fromDate, date)
+            } else {
+                fetchAggregate(fromDate, date)
+            }
+
         }
     };
 
@@ -164,6 +175,21 @@ const Aggregate: React.FC = () => {
                                 <MenuItem value={"user_univ_id"}>학번</MenuItem>
                             </Select>
                         </FormControl>
+                        <div className="padding"></div>
+                        {dept ? <Button id="dept1" color="primary" variant="contained" className="dept1" onClick={() => {
+                            if (fromDate && toDate) {
+                                fetchAggregate(fromDate, toDate)
+                            }
+                        }}>
+                            전체부서로그
+                        </Button> : <Button id="dept1" variant="contained" className="dept1" onClick={() => {
+                                if (fromDate && toDate) {
+                                    currentDeptLogButtonTapped(fromDate, toDate)
+                                }
+                            }}>
+                                현재부서로그
+                        </Button>}
+
                     </Grid>
                 </MuiPickersUtilsProvider>
             </div>
@@ -179,6 +205,52 @@ const Aggregate: React.FC = () => {
         {excelDownView && <ExcelDown aggregates={aggregates} turnOfExcelDown={turnOfExcelDown} />}
 
     </div>
+
+    function currentDeptLogButtonTapped(fromDate: Date, toDate: Date) {
+        console.log("fetch aggregate")
+        setDept(true)
+        const date_from = `${fromDate.getFullYear()}-${fromDate.getMonth() + 1}-${fromDate.getDate()}`
+        const date_to = `${toDate.getFullYear()}-${toDate.getMonth() + 1}-${toDate.getDate()}`
+
+        axios.get(`${ADMIN_END_POINT}msc/log?date_from=${date_from}&date_to=${date_to}&dept_view=1`, {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    const infos = res.data.data.data as Info[]
+                    console.log(infos)
+                    axios.post(`${ADMIN_END_POINT}msc/aggregate`, {
+                        data: infos
+                    })
+                        .then(res => {
+                            const data = res.data.data
+                            console.log(res)
+                            let aggregates: IAggregate[] = []
+                            for (var n in data) {
+
+                                const aggregate: IAggregate = {
+                                    univ_id: n,
+                                    value: data[n]
+                                }
+
+                                aggregates.push(aggregate)
+
+                            }
+
+                            setAggregates(aggregates)
+
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
 
     function turnOfExcelDown() {
         setExcelDownView(false)
@@ -197,8 +269,8 @@ const Aggregate: React.FC = () => {
     }
 
     function fetchAggregate(fromDate: Date, toDate: Date) {
+        setDept(false)
 
-        console.log("fetch aggregate")
 
         const date_from = `${fromDate.getFullYear()}-${fromDate.getMonth() + 1}-${fromDate.getDate()}`
         const date_to = `${toDate.getFullYear()}-${toDate.getMonth() + 1}-${toDate.getDate()}`
@@ -211,12 +283,15 @@ const Aggregate: React.FC = () => {
             .then(res => {
                 if (res.status === 200) {
                     const infos = res.data.data.data as Info[]
+                    console.log(infos)
                     axios.post(`${ADMIN_END_POINT}msc/aggregate`, {
                         data: infos
                     })
                         .then(res => {
                             const data = res.data.data
+
                             let aggregates: IAggregate[] = []
+                            console.log(res)
                             for (var n in data) {
 
                                 const aggregate: IAggregate = {
@@ -227,6 +302,7 @@ const Aggregate: React.FC = () => {
                                 aggregates.push(aggregate)
 
                             }
+
                             setAggregates(aggregates)
                         })
                         .catch(err => {
