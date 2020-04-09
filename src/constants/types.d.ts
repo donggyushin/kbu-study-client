@@ -22,6 +22,21 @@ export interface IConvertedAggregate {
     end: string
 }
 
+export interface IConvertedInfo {
+    access_id: string
+    access_datetime: string
+    created_datetime: string
+    updated_datetime: string
+    disabled_aggregate: string
+    user_name: string
+    user_univ_id: string
+    user_major: string
+    admin_id: string
+    admin_dept: string
+    is_manual: string
+    ip_addr: string
+}
+
 export interface Info {
     access_id: number
     access_datetime: string
