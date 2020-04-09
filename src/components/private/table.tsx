@@ -41,7 +41,7 @@ const SimpleTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTimeInp
                         <TableCell align="right">접근 시각</TableCell>
                         <TableCell align="right">인증 관리자</TableCell>
                         <TableCell align="right">관리자 부서</TableCell>
-                        <TableCell align="right">집계 제외</TableCell>
+                        <TableCell style={{ "width": "80px" }} align="right">집계 제외</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

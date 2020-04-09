@@ -39,8 +39,8 @@ const CurrentUserTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTi
                         <TableCell align="right">자동/수동</TableCell>
                         <TableCell align="right">접근 시각</TableCell>
                         <TableCell align="right">인증 관리자</TableCell>
-                        <TableCell align="right">인증 경과시간</TableCell>
                         <TableCell align="right">관리자 부서</TableCell>
+                        <TableCell align="right">인증 경과시간</TableCell>
                         {/* <TableCell align="right">데이터 생성시각</TableCell>
                         <TableCell align="right">데이터 업데이트시각</TableCell> */}
                         {/* <TableCell align="right">인증 ip</TableCell> */}
@@ -59,11 +59,10 @@ const CurrentUserTable: React.FC<IProps> = ({ infos, noLabelTapped, turnOnExitTi
                             <TableCell align="right">{info.is_manual ? <span className="table__red_text">수동</span> : <span>자동</span>}</TableCell>
                             <TableCell align="right">{info.access_datetime}</TableCell>
                             <TableCell align="right">{info.admin_id}</TableCell>
+                            <TableCell align="right">{info.admin_dept}</TableCell>
                             <TableCell align="right">{
                                 getTime(info.access_datetime)
-
                             }</TableCell>
-                            <TableCell align="right">{info.admin_dept}</TableCell>
                             {/* <TableCell align="right">{info.created_datetime}</TableCell>
                             <TableCell align="right">{info.updated_datetime}</TableCell> */}
                             {/* <TableCell align="right">{info.ip_addr}</TableCell> */}

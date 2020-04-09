@@ -15,6 +15,24 @@ import { IAggregate } from '../../../constants/types'
 import AggregateTable from './aggregateTable';
 import AggregateDetail from './aggregateDetail';
 import ExcelDown from './excelDown';
+import { TextField } from '@material-ui/core'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        formControl: {
+            margin: theme.spacing(1),
+            minWidth: 120,
+        },
+        selectEmpty: {
+            marginTop: theme.spacing(2),
+        },
+    }),
+);
 
 const Aggregate: React.FC = () => {
 
@@ -24,8 +42,14 @@ const Aggregate: React.FC = () => {
 
     const [toDate, setToDate] = React.useState<Date | null>(new Date())
     const [aggregates, setAggregates] = useState<IAggregate[]>([])
+    const [searchedAggregates, setSearchedAggregates] = useState<IAggregate[]>([])
+    const [searching, setSearching] = useState(false)
     const [selectedAggregate, setSelectedAggregate] = useState<IAggregate>()
     const [excelDownView, setExcelDownView] = useState(false)
+    const [searchCategory, setSearchCategory] = React.useState("user_univ_id");
+    const [searchText, setSearchText] = React.useState<String>("")
+
+    const classes = useStyles();
 
     const handleDateChange = (date: Date | null) => {
         setFromDate(date);
@@ -40,6 +64,32 @@ const Aggregate: React.FC = () => {
             fetchAggregate(fromDate, date)
         }
     };
+
+    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setSearchCategory(event.target.value as string);
+    };
+
+    const handleTextSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchText(event.target.value)
+        const searchText = event.target.value
+
+        if (searchText === "") {
+            setSearching(false)
+            return
+        }
+
+        if (searchCategory === "user_univ_id") {
+            const searchedData: IAggregate[] = aggregates.filter((aggregate) => {
+                if (aggregate.univ_id.includes(searchText)) {
+                    return true
+                } else {
+                    return false
+                }
+            })
+            setSearchedAggregates(searchedData)
+            setSearching(true)
+        }
+    }
 
     useEffect(() => {
         if (fromDate && toDate) {
@@ -71,41 +121,56 @@ const Aggregate: React.FC = () => {
             </Link>
             <button onClick={logoutPressed}>로그아웃</button>
         </div>
-        <div className="date_picker_Container">
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <Grid container justify="space-around">
-                    <KeyboardDatePicker
-                        disableToolbar
-                        variant="inline"
-                        format="MM/dd/yyyy"
-                        margin="normal"
-                        id="date-picker-inline"
-                        label="검색 시작일"
-                        value={fromDate}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                    />
-                    <KeyboardDatePicker
-                        disableToolbar
-                        variant="inline"
-                        format="MM/dd/yyyy"
-                        margin="normal"
-                        id="date-picker-inline"
-                        label="검색 마지막일"
-                        value={toDate}
-                        onChange={handleToDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                    />
+        <div className="date_picker_view__aggregate_table_container__container">
+            <div className="date_picker_Container">
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Grid alignItems="flex-end" container justify="space-around">
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="MM/dd/yyyy"
+                            margin="normal"
+                            id="date-picker-inline"
+                            label="검색 시작일"
+                            value={fromDate}
+                            onChange={handleDateChange}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="MM/dd/yyyy"
+                            margin="normal"
+                            id="date-picker-inline"
+                            label="검색 마지막일"
+                            value={toDate}
+                            onChange={handleToDateChange}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                        <div className="padding"></div>
+                        <TextField id="standard-basic" className="standard-basic" label="검색" value={searchText} onChange={handleTextSearch} variant="standard" />
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="demo-simple-select-label">검색조건</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={searchCategory}
+                                onChange={handleChange}
+                            >
+                                <MenuItem value={"user_univ_id"}>학번</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </MuiPickersUtilsProvider>
+            </div>
+            <div className="aggregate_table_container">
+                {searching ? <AggregateTable selectAggregate={selectAggregate} aggregates={searchedAggregates} /> : <AggregateTable selectAggregate={selectAggregate} aggregates={aggregates} />}
 
-                </Grid>
-            </MuiPickersUtilsProvider>
-        </div>
-        <div className="aggregate_table_container">
-            <AggregateTable selectAggregate={selectAggregate} aggregates={aggregates} />
+            </div>
         </div>
         <button onClick={excelDownButtonTapped} className="excel_down_button">
             엑셀 다운로드

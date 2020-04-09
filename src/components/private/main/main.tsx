@@ -5,7 +5,7 @@ import './styles.scss'
 import { Info } from '../../../constants/types'
 import axios from 'axios'
 import { ADMIN_END_POINT } from '../../../constants/endpoint'
-import { TextField } from '@material-ui/core'
+import { TextField, Button } from '@material-ui/core'
 import AlertDialog from '../../global/dialog'
 import SimpleTable from '../table'
 import ExitTimeInput from './exitTimeInput'
@@ -157,82 +157,85 @@ const Main = () => {
             </Link>
             <button onClick={logoutPressed}>로그아웃</button>
         </div>
-        <div className="toolbars_container">
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <Grid className="grid" container justify="space-around">
-                    <KeyboardDatePicker
-                        disableToolbar
-                        variant="inline"
-                        format="MM/dd/yyyy"
-                        margin="normal"
-                        id="date-picker-inline"
-                        label="검색 시작일"
-                        value={selectedFromDate}
-                        onChange={handleFromDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                    />
-                    <KeyboardDatePicker
-                        disableToolbar
-                        variant="inline"
-                        format="MM/dd/yyyy"
-                        margin="normal"
-                        id="date-picker-inline"
-                        label="검색 마지막일"
-                        value={selectedToDate}
-                        onChange={handleToDateChangee}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                    />
-                    <TextField id="standard-basic" className="standard-basic" label="검색" variant="standard" onChange={textFieldHandler} />
-                    <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-simple-select-label">검색조건</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={category}
-                            onChange={handleChange}
-                        >
-                            <MenuItem value={"user_name"}>이름</MenuItem>
-                            <MenuItem value={"user_univ_id"}>학번</MenuItem>
-                            <MenuItem value={"user_major"}>전공</MenuItem>
-                            <MenuItem value={"admin_id"}>인증 관리자</MenuItem>
-                            <MenuItem value={"admin_dept"}>관리자 부서</MenuItem>
-                            <MenuItem value={"ip_addr"}>인증 ip</MenuItem>
-                        </Select>
-                    </FormControl>
-                    {allDept ? <button id="dept1" onClick={dept1ButtonTappedAgain} className="dept1">
-                        현재부서로그 보기
-                    </button> : <button id="dept1" onClick={dept1ButtonTapped} className="dept1">
-                            전체부서로그 보기
-                    </button>}
+        <div className="toolbar__view__container">
+            <div className="toolbars_container">
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Grid className="grid" container justify="space-around">
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="MM/dd/yyyy"
+                            margin="normal"
+                            id="date-picker-inline"
+                            label="검색 시작일"
+                            value={selectedFromDate}
+                            onChange={handleFromDateChange}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="MM/dd/yyyy"
+                            margin="normal"
+                            id="date-picker-inline"
+                            label="검색 마지막일"
+                            value={selectedToDate}
+                            onChange={handleToDateChangee}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                        <TextField id="standard-basic" className="standard-basic" label="검색" variant="standard" onChange={textFieldHandler} />
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="demo-simple-select-label">검색조건</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={category}
+                                onChange={handleChange}
+                            >
+                                <MenuItem value={"user_name"}>이름</MenuItem>
+                                <MenuItem value={"user_univ_id"}>학번</MenuItem>
+                                <MenuItem value={"user_major"}>전공</MenuItem>
+                                <MenuItem value={"admin_id"}>인증 관리자</MenuItem>
+                                <MenuItem value={"admin_dept"}>관리자 부서</MenuItem>
+                                <MenuItem value={"ip_addr"}>인증 ip</MenuItem>
+                            </Select>
+                        </FormControl>
+                        {allDept ? <Button id="dept1" variant="contained" color="primary" onClick={dept1ButtonTappedAgain} className="dept1">
+                            현재부서로그 보기
+                    </Button> : <Button id="dept1" variant="contained" color="secondary" onClick={dept1ButtonTapped} className="dept1">
+                                전체부서로그 보기
+                    </Button>}
 
-                </Grid>
-            </MuiPickersUtilsProvider>
-        </div>
-        <div className="view_container_container">
-            <div className="view__container">
-                <div className="label">
-                    현재 사용자
+                    </Grid>
+                </MuiPickersUtilsProvider>
+            </div>
+            <div className="view_container_container">
+                <div className="view__container">
+                    <div className="label">
+                        현재 사용자
                     </div>
-                <CurrentUserTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={currentUsers} />
-            </div>
-        </div>
-
-        <div className="view_container_container">
-            <div className="view__container">
-                <div className="label">
-                    전체 사용자
+                    <CurrentUserTable turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={currentUsers} />
                 </div>
-                {searching ? <SimpleTable selectInfoCell={selectInfoCell} turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={searchedInfos} /> : <SimpleTable selectInfoCell={selectInfoCell} turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={infos} />}
-
-
-                {dialog && <AlertDialog title={dialogTitle} message={dialogMessage} callback={closeAlertAndLogout} />}
             </div>
 
+            <div className="view_container_container">
+                <div className="view__container">
+                    <div className="label">
+                        전체 사용자
+                </div>
+                    {searching ? <SimpleTable selectInfoCell={selectInfoCell} turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={searchedInfos} /> : <SimpleTable selectInfoCell={selectInfoCell} turnOnExitTimeInput={turnOnExitTimeInput} noLabelTapped={numberLabelTapped} infos={infos} />}
+
+
+                    {dialog && <AlertDialog title={dialogTitle} message={dialogMessage} callback={closeAlertAndLogout} />}
+                </div>
+
+            </div>
         </div>
+
         <button onClick={excelDownButtonTapped} className="excel_down_button">
             엑셀다운
         </button>
