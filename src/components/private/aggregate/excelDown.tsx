@@ -59,7 +59,7 @@ const ExcelDown: React.FC<IProps> = ({ turnOfExcelDown, aggregates }) => {
 
     const filename = "aggregate-excel"
     const fields = {
-        "no": "No",
+        "no": "\ufeffNo",
         "univ_id": "학번",
         "total_seconds": "총 집계 시간",
         "start": "시작",
@@ -74,6 +74,7 @@ const ExcelDown: React.FC<IProps> = ({ turnOfExcelDown, aggregates }) => {
                 data={convertedAggregates}
                 filename={filename}
                 fields={fields}
+
             />}
 
         </div>
