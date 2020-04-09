@@ -45,11 +45,11 @@ const ExcelDown: React.FC<IProps> = ({ turnOfExcelDown, aggregates }) => {
             const start = ag.value.detail[0] ? ag.value.detail[0].from : "데이터 없음"
             const end = ag.value.detail[aggregates.length - 1] ? ag.value.detail[aggregates.length - 1].to : "데이터 없음"
             return {
-                no: i + 1,
-                univ_id,
-                total_seconds,
-                start,
-                end
+                no: `\ufeff${i + 1}`,
+                univ_id: `\ufeff${univ_id}`,
+                total_seconds: `\ufeff${total_seconds}`,
+                start: `\ufeff${start}`,
+                end: `\ufeff${end}`
             }
         })
 

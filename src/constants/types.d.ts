@@ -15,9 +15,9 @@ export interface IAggregate {
 }
 
 export interface IConvertedAggregate {
-    no: number
+    no: string
     univ_id: string
-    total_seconds: number
+    total_seconds: string
     start: string
     end: string
 }
