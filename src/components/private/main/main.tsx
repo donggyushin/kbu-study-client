@@ -250,6 +250,7 @@ const Main = () => {
 
     function dept1ButtonTappedAgain() {
 
+
         if (selectedFromDate && selectedToDate) {
             etag3 = ""
             etag1 = ""
@@ -259,6 +260,8 @@ const Main = () => {
                 fetchInfos(selectedFromDate, selectedToDate)
             }, 3000)
 
+
+
             setAllDept(false)
 
         }
@@ -266,7 +269,11 @@ const Main = () => {
 
     function dept1ButtonTapped() {
 
+        console.log("1")
+
+
         if (selectedFromDate && selectedToDate) {
+            console.log("2")
             etag3 = ""
             etag1 = ""
             clearInterval(repeat)
@@ -274,6 +281,8 @@ const Main = () => {
             repeat = setInterval(() => {
                 fetchInfosDept1(selectedFromDate, selectedToDate)
             }, 3000)
+
+
 
             setAllDept(true)
 
@@ -315,7 +324,17 @@ const Main = () => {
         clearInterval(repeat)
         setSelectedToDate(date)
         if (selectedFromDate && date) {
-            fetchInfosFunction(selectedFromDate, date)
+
+            if (allDept) {
+                clearInterval(repeat)
+                fetchInfosDept1(selectedFromDate, date)
+                repeat = setInterval(() => {
+                    fetchInfosDept1(selectedFromDate, date)
+                }, 3000)
+            } else {
+                clearInterval(repeat)
+                fetchInfosFunction(selectedFromDate, date)
+            }
         }
 
     }
@@ -324,7 +343,18 @@ const Main = () => {
         clearInterval(repeat)
         setSelectedFromDate(date)
         if (date && selectedToDate) {
-            fetchInfosFunction(date, selectedToDate)
+            if (allDept) {
+                clearInterval(repeat)
+                fetchInfosDept1(date, selectedToDate)
+                repeat = setInterval(() => {
+                    fetchInfosDept1(date, selectedToDate)
+                }, 3000)
+            } else {
+                clearInterval(repeat)
+                fetchInfosFunction(date, selectedToDate)
+
+            }
+
         }
 
     }
@@ -460,9 +490,11 @@ const Main = () => {
         const date1 = new Date()
         const date2 = new Date()
 
+
+
         const date_from = `${date1.getFullYear()}-${date1.getMonth() + 1}-${date1.getDate()}`
         const date_to = `${date2.getFullYear()}-${date2.getMonth() + 1}-${date2.getDate()}`
-        axios.get(`${ADMIN_END_POINT}msc/log?date_from=${date_from}&date_to=${date_to}`, {
+        axios.get(`${ADMIN_END_POINT}msc/log?date_from=${date_from}&date_to=${date_to}&dept_view=1`, {
             headers: {
                 Authorization: localStorage.getItem("token"),
                 "If-None-Match": etag2
@@ -542,7 +574,9 @@ const Main = () => {
         const date_from = `${dateFrom.getFullYear()}-${dateFrom.getMonth() + 1}-${dateFrom.getDate()}`
         const date_to = `${dateTo.getFullYear()}-${dateTo.getMonth() + 1}-${dateTo.getDate()}`
 
-        axios.get(`${ADMIN_END_POINT}msc/log?date_from=${date_from}&date_to=${date_to}`, {
+        console.log("3")
+
+        axios.get(`${ADMIN_END_POINT}msc/log?date_from=${date_from}&date_to=${date_to}&dept_view=1`, {
             headers: {
                 "Authorization": localStorage.getItem("token"),
                 "If-None-Match": etag3
