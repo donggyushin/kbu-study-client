@@ -206,7 +206,7 @@ const Main = () => {
                         </FormControl>
                         {allDept ? <Button id="dept1" variant="contained" color="primary" onClick={dept1ButtonTappedAgain} className="dept1">
                             현재부서로그 보기
-                    </Button> : <Button id="dept1" variant="contained" color="secondary" onClick={dept1ButtonTapped} className="dept1">
+                    </Button> : <Button id="dept1" variant="contained" onClick={dept1ButtonTapped} className="dept1">
                                 전체부서로그 보기
                     </Button>}
 
