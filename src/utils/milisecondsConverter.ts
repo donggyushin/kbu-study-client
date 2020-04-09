@@ -8,8 +8,8 @@ export default function milisecondsConverter(miliseconds: number) {
     result = result.replace('seconds', '초')
     result = result.replace('second', '초')
 
-    result = result.replace('hour', '시')
-    result = result.replace('hours', '시')
+    result = result.replace('hour', '시간')
+    result = result.replace('hours', '시간')
 
     result = result.replace('day', '일')
     result = result.replace('days', '일')
@@ -24,6 +24,9 @@ export default function milisecondsConverter(miliseconds: number) {
     result = result.replace('years', '년')
 
     result = result.replace('s', '')
+
+    result = result.replace(',', '')
+    result = result.replace(',', '')
 
     return result
 }

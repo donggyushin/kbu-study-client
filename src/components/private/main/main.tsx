@@ -205,9 +205,9 @@ const Main = () => {
                             </Select>
                         </FormControl>
                         {allDept ? <Button id="dept1" variant="contained" color="primary" onClick={dept1ButtonTappedAgain} className="dept1">
-                            현재부서로그 보기
+                            전체부서로그
                     </Button> : <Button id="dept1" variant="contained" onClick={dept1ButtonTapped} className="dept1">
-                                전체부서로그 보기
+                                현재부서로그
                     </Button>}
 
                     </Grid>
@@ -509,6 +509,7 @@ const Main = () => {
                     }
                 }
 
+                console.log("current user ids: ", currentUsersIds)
 
                 // 해당 id 값을 가진 유저들을 가장 최근 데이터만 한번씩만 골라낸다. 
                 for (let i = 0; i < currentUsersIds.length; i++) {
