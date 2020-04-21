@@ -17,6 +17,7 @@ import {
 } from '@material-ui/pickers';
 import axios from 'axios'
 import { ADMIN_END_POINT } from '../../../constants/endpoint';
+import PostCell from './cell';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -31,6 +32,12 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+interface studentInfo {
+    name: string
+    sid: string
+    major: string
+    access_datetime: string
+}
 
 const Post = () => {
 
@@ -42,6 +49,8 @@ const Post = () => {
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(
         new Date(),
     );
+
+    const [students, setStudents] = React.useState<studentInfo[]>([])
 
     const handleMajorChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setMajor(event.target.value as string);
@@ -121,12 +130,21 @@ const Post = () => {
                         />
                     </Grid>
                 </MuiPickersUtilsProvider>
-                <Button onClick={submitButtonTapped} variant="contained" color="primary">
-                    제출
+                <Button className="add_button" onClick={addButtonTapped} variant="contained" color="primary">
+                    추가
                 </Button>
+                <Button onClick={submitTapped} variant="contained" color="secondary">
+                    등록
+                </Button>
+            </div>
+            <div className="post_list_container">
+                {students.map((student, i) => {
+                    return <PostCell student={student} key={i} />
+                })}
             </div>
         </div>
     </div>
+
 
     function handleSid(e: React.ChangeEvent<HTMLInputElement>) {
         setSid(e.target.value)
@@ -136,7 +154,40 @@ const Post = () => {
         setName(e.target.value)
     }
 
-    function submitButtonTapped() {
+    function submitTapped() {
+
+        const token = localStorage.getItem("token")
+        students.map((student, i) => {
+            axios.post(`${ADMIN_END_POINT}msc/log`, {
+                user_name: student.name,
+                user_univ_id: student.sid,
+                user_major: student.major,
+                access_datetime: student.access_datetime
+            }, {
+                headers: {
+                    Authorization: token
+                }
+            })
+                .then(res => {
+                    if (res.status === 200) {
+                        console.log(res)
+
+                        if (students.length - 1 === i) {
+                            alert("데이터 입력 성공")
+                        }
+
+                    } else {
+                        alert("데이터 입력 실패")
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        })
+        initData()
+        setStudents([])
+    }
+    function addButtonTapped() {
 
         const pattern = /20[12]\d0\d{4}/i
         const sidCheck = pattern.test(sid)
@@ -149,32 +200,41 @@ const Post = () => {
             return
         }
 
-        const token = localStorage.getItem("token")
+
+
+
 
 
         const access_datetime = `${selectedDate?.getFullYear()}-${selectedDate!.getMonth() + 1}-${selectedDate?.getDate()} ${selectedDate?.getHours()}:${selectedDate?.getMinutes()}:${selectedDate?.getSeconds()}`
-        axios.post(`${ADMIN_END_POINT}msc/log`, {
-            user_name: name,
-            user_univ_id: sid,
-            user_major: major,
+        const newStudent: studentInfo = {
+            name: name,
+            sid: sid,
+            major: major,
             access_datetime: access_datetime
-        }, {
-            headers: {
-                Authorization: token
-            }
-        })
-            .then(res => {
-                if (res.status === 200) {
-                    console.log(res)
-                    initData()
-                    alert("데이터 입력 성공")
-                } else {
-                    alert("데이터 입력 실패")
-                }
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        }
+        setStudents([...students, newStudent])
+        // axios.post(`${ADMIN_END_POINT}msc/log`, {
+        //     user_name: name,
+        //     user_univ_id: sid,
+        //     user_major: major,
+        //     access_datetime: access_datetime
+        // }, {
+        //     headers: {
+        //         Authorization: token
+        //     }
+        // })
+        //     .then(res => {
+        //         if (res.status === 200) {
+        //             console.log(res)
+        //             initData()
+        //             alert("데이터 입력 성공")
+        //         } else {
+        //             alert("데이터 입력 실패")
+        //         }
+        //     })
+        //     .catch(err => {
+        //         console.log(err)
+        //     })
     }
 
     function initData() {

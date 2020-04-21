@@ -47,7 +47,7 @@ const ExcelDown: React.FC<IProps> = ({ turnOfExcelDown, aggregates }) => {
             return {
                 no: `\ufeff${i + 1}`,
                 univ_id: `\ufeff${univ_id}`,
-                total_seconds: `\ufeff${total_seconds}`,
+                total_seconds: `\ufeff${parseInt(String(total_seconds / 60))}`,
                 start: `\ufeff${start}`,
                 end: `\ufeff${end}`
             }
@@ -61,7 +61,7 @@ const ExcelDown: React.FC<IProps> = ({ turnOfExcelDown, aggregates }) => {
     const fields = {
         "no": "\ufeffNo",
         "univ_id": "학번",
-        "total_seconds": "총 집계 시간",
+        "total_seconds": "총 집계 시간(분)",
         "start": "시작",
         "end": "종료"
     }

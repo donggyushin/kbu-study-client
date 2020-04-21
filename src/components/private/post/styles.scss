@@ -33,6 +33,40 @@
             .select {
                 width: 190px;
             }
+            .add_button {
+                margin-right: 10px;
+            }
+        }
+
+        .post_list_container {
+            margin-top: 100px;
+            display: flex;
+            flex-direction: column;
+            .cell {
+                display: flex;
+                background-color: lightgray;
+                padding:10px;
+                margin-bottom: 5px;
+                .span {
+                    margin-right: 17px;
+                    &:nth-child(1) {
+                        width: 70px;
+                    }
+
+                    &:nth-child(2) {
+                        width: 100px;
+                    }
+
+                    &:nth-child(3) {
+                        width: 150px;
+                    }
+
+                    &:nth-child(4) {
+                        width: 250px;
+                    }
+                    
+                }
+            }
         }
     }
 

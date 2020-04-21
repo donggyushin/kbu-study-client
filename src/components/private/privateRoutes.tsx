@@ -17,9 +17,10 @@ export default function App() {
         autoLogin()
         repeat = setInterval(() => {
             autoLogin()
-        }, 1000 * 60 * 10)
+        }, 1000 * 60 * 5)
 
         return function cleanup() {
+
             clearInterval(repeat)
         }
     }, [])
